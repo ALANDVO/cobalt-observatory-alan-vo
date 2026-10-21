@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "cobalt-observatory-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: cobalt-observatory-alan-vo",
+  "workflows": [
+    "Ingest and search OCSF security events with trace_id/span_id correlation for incident investigation",
+    "Register and configure AI agents with model/provider metadata for evaluation pipelines",
+    "Run deterministic agent evaluations on datasets with metrics and opt-in LLM advisory explanations"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
