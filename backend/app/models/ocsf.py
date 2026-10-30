@@ -68,6 +68,9 @@ class Evaluation(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     agent_id: Mapped[int] = mapped_column(index=True)
+    # Trace correlation (OCSF 1.8 Trace profile)
+    trace_uid: Mapped[Optional[str]] = mapped_column(String(32), index=True, nullable=True)
+    span_uid: Mapped[Optional[str]] = mapped_column(String(16), nullable=True)
     name: Mapped[str] = mapped_column(String(200))
     dataset: Mapped[str] = mapped_column(String(100))
     score: Mapped[float]
@@ -78,6 +81,7 @@ class Evaluation(Base):
 
     __table_args__ = (
         Index("ix_eval_agent_created", "agent_id", "created_at"),
+        Index("ix_eval_trace_uid", "trace_uid"),
     )
 
 

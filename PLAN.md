@@ -4,54 +4,14 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-project-skeleton
+continue-implementation
 
 ## Roadmap
 
-### project-skeleton — Project skeleton with FastAPI backend and React frontend
+### continue-implementation — Continue implementation and resolve known failures
 
-Status: done
-
-Acceptance:
-- FastAPI app runs with health endpoint
-- React + TypeScript + Vite frontend builds
-- Docker compose with backend, frontend, Keycloak, SQLite
-- Basic CI workflow runs backend/frontend tests
-- README with install/run/test steps
-- portfolio.json with required fields
-
-Implementation: `backend/app/main.py`, `backend/app/core/config.py`, `backend/app/core/database.py`, `backend/app/models/ocsf.py`, `backend/app/api/health.py`, `backend/app/api/ocsf_events.py`, `backend/app/api/agents.py`, `backend/app/api/evaluations.py`, `backend/app/services/llm.py`, `backend/tests/conftest.py`, `backend/tests/test_health.py`, `backend/tests/test_ocsf_events.py`, `backend/tests/test_agents.py`, `backend/tests/test_evaluations.py`, `backend/tests/test_llm.py`, `frontend/package.json`, `frontend/tsconfig.json`, `frontend/vite.config.ts`, `frontend/index.html`, `frontend/src/main.tsx`, `frontend/src/App.tsx`, `frontend/src/index.css`, `frontend/src/types/api.ts`, `frontend/src/api/client.ts`, `frontend/src/components/ui/*.tsx`, `frontend/src/pages/*.tsx`, `frontend/__tests__/pages.test.tsx`, `backend/Dockerfile`, `frontend/Dockerfile`, `compose.yaml`, `.github/workflows/ci.yml`
-
-Tests: `backend/tests/test_health.py`, `backend/tests/test_ocsf_events.py`, `backend/tests/test_agents.py`, `backend/tests/test_evaluations.py`, `backend/tests/test_llm.py`, `frontend/__tests__/pages.test.tsx`
-
-### ai-ml-engine — AI/ML domain engine: agent trace correlation and evaluation
-
-Status: planned
+Status: in_progress
 
 Acceptance:
-- Store and query OCSF events with trace_id/span_id correlation
-- Agent evaluation workflow with deterministic scoring
-- Three complete workflows: ingest, search, evaluate
-- LLM explanations opt-in, labeled advisory
-
-### auth-oidc — OIDC authentication with Keycloak
-
-Status: planned
-
-Acceptance:
-- Authorization code flow with PKCE
-- Backend session management with HttpOnly cookies
-- Role-based access (viewer/operator/admin)
-- Login/logout flows work end-to-end
-
-### docs-packaging — Documentation, packaging, and CI completion
-
-Status: planned
-
-Acceptance:
-- README with Mermaid architecture diagram
-- CHANGELOG.md, LICENSE, .env.example
-- CI passes backend (12+ tests) and frontend (3+ tests)
-- Dockerfiles with nonroot users, healthchecks
-- Source code within 50-150KB budget
+- Run checks, fix failures, and implement the next planned feature
 
