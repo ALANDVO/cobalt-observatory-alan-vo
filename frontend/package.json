@@ -2,7 +2,11 @@
   "name": "cobalt-observatory",
   "version": "1.0.0",
   "description": "AI/ML Agent Trace Correlation and Evaluation Platform",
-  "author": "Alan Vo <alanvo@gmail.com>",
+  "author": {
+    "name": "Alan Vo",
+    "email": "alanvo@gmail.com",
+    "url": "https://github.com/ALANDVO"
+  },
   "license": "MIT",
   "type": "module",
   "scripts": {

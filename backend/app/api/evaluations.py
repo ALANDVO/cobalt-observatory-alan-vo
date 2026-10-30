@@ -21,6 +21,9 @@ class EvaluationCreate(BaseModel):
     metrics: Dict[str, Any] = Field(default_factory=dict)
     details: Optional[str] = None
     llm_explanation: Optional[str] = None
+    # Trace correlation (OCSF 1.8 Trace profile)
+    trace_uid: Optional[str] = Field(None, pattern=r"^[0-9a-f]{32}$", description="W3C trace ID (32 hex chars)")
+    span_uid: Optional[str] = Field(None, pattern=r"^[0-9a-f]{16}$", description="W3C span ID (16 hex chars)")
 
 
 class EvaluationResponse(BaseModel):
@@ -34,9 +37,14 @@ class EvaluationResponse(BaseModel):
     details: Optional[str]
     llm_explanation: Optional[str]
     created_at: datetime
+    # Trace correlation
+    trace_uid: Optional[str] = None
+    span_uid: Optional[str] = None
 
     class Config:
         from_attributes = True
+
+
 
 
 class PaginatedEvaluationResponse(BaseModel):
@@ -73,6 +81,8 @@ async def create_evaluation(
 
     db_evaluation = Evaluation(
         agent_id=evaluation.agent_id,
+        trace_uid=evaluation.trace_uid,
+        span_uid=evaluation.span_uid,
         name=evaluation.name,
         dataset=evaluation.dataset,
         score=evaluation.score,
@@ -95,6 +105,7 @@ async def list_evaluations(
     dataset: Optional[str] = None,
     min_score: Optional[float] = Query(None, ge=0.0, le=1.0),
     max_score: Optional[float] = Query(None, ge=0.0, le=1.0),
+    trace_uid: Optional[str] = Query(None, pattern=r"^[0-9a-f]{32}$"),
 ):
     """List evaluations with filtering and pagination."""
     query = select(Evaluation)
@@ -107,6 +118,8 @@ async def list_evaluations(
         query = query.where(Evaluation.score >= min_score)
     if max_score is not None:
         query = query.where(Evaluation.score <= max_score)
+    if trace_uid:
+        query = query.where(Evaluation.trace_uid == trace_uid)
 
     count_query = select(func.count()).select_from(query.subquery())
     total = await session.scalar(count_query) or 0

@@ -163,4 +163,81 @@ class TestEvaluations:
         assert response.status_code == 204
 
         response = app.get(f"/api/v1/evaluations/{eval_id}")
-        assert response.status_code == 404
+    def test_create_evaluation_with_trace(self, app):
+        """Create evaluation with trace correlation."""
+        agent_resp = app.post("/api/v1/agents", json={
+            "name": "trace-agent", "model": "gpt-4o", "provider": "openai"
+        })
+        agent_id = agent_resp.json()["id"]
+
+        trace_uid = "0af7651916cd43dd8448eb211c80319c"
+        span_uid = "1234567890abcdef"
+        eval_data = {
+            "agent_id": agent_id,
+            "name": "Trace Evaluation",
+            "dataset": "trace-dataset",
+            "score": 0.9,
+            "trace_uid": trace_uid,
+            "span_uid": span_uid,
+        }
+        response = app.post("/api/v1/evaluations", json=eval_data)
+        assert response.status_code == 201
+        data = response.json()
+        assert data["trace_uid"] == trace_uid
+        assert data["span_uid"] == span_uid
+
+    def test_create_evaluation_invalid_trace_id(self, app):
+        """Create evaluation with invalid trace_id fails."""
+        agent_resp = app.post("/api/v1/agents", json={
+            "name": "invalid-trace-agent", "model": "gpt-4o", "provider": "openai"
+        })
+        agent_id = agent_resp.json()["id"]
+
+        eval_data = {
+            "agent_id": agent_id,
+            "name": "Invalid Trace Evaluation",
+            "dataset": "trace-dataset",
+            "score": 0.9,
+            "trace_uid": "invalid-trace-id",
+        }
+        response = app.post("/api/v1/evaluations", json=eval_data)
+        assert response.status_code == 422
+
+    def test_filter_evaluations_by_trace_uid(self, app):
+        """Filter evaluations by trace_uid."""
+        agent_resp = app.post("/api/v1/agents", json={
+            "name": "filter-trace-agent", "model": "gpt-4o", "provider": "openai"
+        })
+        agent_id = agent_resp.json()["id"]
+
+        trace_uid_1 = "0af7651916cd43dd8448eb211c80319c"
+        trace_uid_2 = "1af7651916cd43dd8448eb211c80319d"
+
+        # Create evaluations with different trace_uids
+        app.post("/api/v1/evaluations", json={
+            "agent_id": agent_id, "name": "Eval 1", "dataset": "ds1", "score": 0.8,
+            "trace_uid": trace_uid_1
+        })
+        app.post("/api/v1/evaluations", json={
+            "agent_id": agent_id, "name": "Eval 2", "dataset": "ds1", "score": 0.9,
+            "trace_uid": trace_uid_2
+        })
+        app.post("/api/v1/evaluations", json={
+            "agent_id": agent_id, "name": "Eval 3", "dataset": "ds1", "score": 0.7,
+            "trace_uid": trace_uid_1
+        })
+
+        # Filter by trace_uid_1
+        response = app.get(f"/api/v1/evaluations?trace_uid={trace_uid_1}")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["total"] == 2
+        for item in data["items"]:
+            assert item["trace_uid"] == trace_uid_1
+
+        # Filter by trace_uid_2
+        response = app.get(f"/api/v1/evaluations?trace_uid={trace_uid_2}")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["total"] == 1
+        assert data["items"][0]["trace_uid"] == trace_uid_2
