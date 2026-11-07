@@ -322,3 +322,7 @@ MIT License — Copyright (c) 2026 Alan Vo <alanvo@gmail.com>
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
