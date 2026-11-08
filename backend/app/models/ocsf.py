@@ -2,12 +2,17 @@
 OCSF Event models for trace correlation.
 Based on OCSF 1.8 schema with Trace profile support.
 """
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 from sqlalchemy import String, Text, DateTime, Index, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
+
+
+def utcnow() -> datetime:
+    """Return timezone-aware UTC datetime."""
+    return datetime.now(timezone.utc)
 
 
 class OCSFEvent(Base):
@@ -38,8 +43,8 @@ class OCSFEvent(Base):
     event_data: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
 
     # Metadata
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
     __table_args__ = (
         Index("ix_ocsf_trace_time", "trace_uid", "time"),
@@ -58,8 +63,8 @@ class Agent(Base):
     provider: Mapped[str] = mapped_column(String(50))
     configuration: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
     is_active: Mapped[bool] = mapped_column(default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
 
 class Evaluation(Base):
@@ -77,7 +82,7 @@ class Evaluation(Base):
     metrics: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
     details: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     llm_explanation: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     __table_args__ = (
         Index("ix_eval_agent_created", "agent_id", "created_at"),
@@ -97,7 +102,7 @@ class AuditLog(Base):
     details: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
     ip_address: Mapped[Optional[str]] = mapped_column(String(45), nullable=True)
     user_agent: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
 
     __table_args__ = (
         Index("ix_audit_user_time", "user_id", "created_at"),

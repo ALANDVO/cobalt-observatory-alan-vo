@@ -27,6 +27,8 @@ async_session_maker = async_sessionmaker(
 
 async def init_db() -> None:
     """Initialize database tables."""
+    # Import models to register them with Base.metadata
+    from app.models import ocsf  # noqa: F401
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
