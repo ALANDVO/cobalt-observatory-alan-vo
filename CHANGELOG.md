@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -16,6 +20,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.2.0] - 2026-11-08
+
+### Fixed
+- Circular import in `backend/app/api/__init__.py` (removed non-existent `auth` import)
+- `datetime.utcnow()` deprecation warnings in `backend/app/models/ocsf.py` (now uses timezone-aware `datetime.now(timezone.utc)`)
+- FastAPI lifespan not being called in `backend/app/main.py` (added `lifespan=lifespan` parameter)
+- Database tables not created on startup in `backend/app/core/database.py` (models imported inside `init_db()`)
+- Missing frontend test dependency `@testing-library/dom`
+
+### Verified
+- All 41 backend tests pass (health, OCSF events, agents, evaluations, LLM adapters)
+- All 5 frontend tests pass (page rendering)
+- End-to-end OCSF event creation with trace correlation works correctly
+- Trace lookup endpoint `/api/v1/ocsf/events/trace/{trace_uid}` returns correlated events
 
 ## [1.0.0] - 2026-10-21
 
