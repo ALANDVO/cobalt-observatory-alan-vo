@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import init_db
-from app.api import health, ocsf_events, agents, evaluations
+from app.api import health, ocsf_events, agents, evaluations, auth
 
 
 @asynccontextmanager
