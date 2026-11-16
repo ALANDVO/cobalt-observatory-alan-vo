@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-continue-implementation
+auth-oidc
 
 ## Roadmap
 
@@ -21,7 +21,7 @@ Tests: `backend/tests/test_health.py`, `backend/tests/test_ocsf_events.py`, `bac
 
 ### auth-oidc — OIDC authentication with Keycloak
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Authorization code flow with PKCE
