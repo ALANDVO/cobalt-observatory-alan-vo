@@ -42,6 +42,7 @@ def create_app() -> FastAPI:
     app.include_router(ocsf_events.router, prefix="/api/v1/ocsf", tags=["ocsf-events"])
     app.include_router(agents.router, prefix="/api/v1/agents", tags=["agents"])
     app.include_router(evaluations.router, prefix="/api/v1/evaluations", tags=["evaluations"])
+    app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 
     return app
 
