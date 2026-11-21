@@ -29,6 +29,10 @@ Acceptance:
 - Role-based access (viewer/operator/admin)
 - Login/logout flows work end-to-end
 
+Implementation: `backend/app/api/auth.py (PKCE, login/callback/logout endpoints, role-based dependency)`, `backend/app/main.py (added auth router inclusion)`, `backend/app/core/config.py (Keycloak OIDC settings already present)`
+
+Tests: `backend/tests/test_health.py`, `backend/tests/test_ocsf_events.py`, `backend/tests/test_auth.py (new - PKCE and auth flow tests)`
+
 ### docs-packaging — Documentation, packaging, and CI completion
 
 Status: planned
