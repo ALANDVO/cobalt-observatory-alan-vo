@@ -190,11 +190,8 @@ async def callback(request: Request, response: Response, session: AsyncSession =
     if code_verifier:
         token_data["code_verifier"] = code_verifier
 
-    async with session._engine.connect() as conn:
-        import asyncio
-        from sqlalchemy import text
-
-        resp = await conn.post(
+    async with httpx.AsyncClient() as client:
+        resp = await client.post(
             token_token_url,
             data=token_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
